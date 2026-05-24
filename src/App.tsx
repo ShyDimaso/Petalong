@@ -110,69 +110,150 @@ const T = {
     aboutMission:"Our mission is simple: make pet transport accessible, affordable, and safe for everyone by connecting people who are already making the journey.",
     termsTitle:"Terms of Service",
     privacyTitle:"Privacy Policy",
+    disclaimerTitle:"Disclaimer",
     footer:{
       tagline:"Connecting pet owners with drivers going their way.",
       platform:"Platform",
       legal:"Legal",
-      links:{about:"About",how:"How it works",browse:"Browse listings",post:"Post a listing",terms:"Terms of Service",privacy:"Privacy Policy",contact:"Contact"},
+      links:{about:"About",how:"How it works",browse:"Browse listings",post:"Post a listing",terms:"Terms of Service",privacy:"Privacy Policy",disclaimer:"Disclaimer",contact:"Contact"},
       disclaimer:"PetAlong is a neutral technology platform. We do not provide transportation services. We are not a transportation company. All arrangements are made directly between users. PetAlong is not responsible for any arrangements, transactions, disputes, or outcomes between users. Use of this platform constitutes acceptance of our Terms of Service.",
-      copyright:"© 2025 PetAlong. Free community platform.",
+      copyright:"© 2026 PetAlong. Free community platform.",
     },
     terms:`TERMS OF SERVICE — PetAlong
+Last updated: May 2026
 
-Last updated: May 2025
+IMPORTANT: PetAlong is a neutral online marketplace — NOT a transportation company. We do not transport animals, employ drivers, or provide transportation services. By using this platform, you agree to these Terms in full.
 
-1. PLATFORM NATURE
-PetAlong ("we", "us", "platform") is a neutral technology platform, not a transportation company. We provide a bulletin board where users can post and find listings. We do not provide, arrange, or participate in any transportation services.
+1. ABOUT PETALONG
+PetAlong ("Platform") is an online marketplace connecting pet owners with drivers for peer-to-peer transport arrangements. PetAlong acts solely as a neutral technology platform and does not participate in any transaction between users. PetAlong is not a transportation company, broker, carrier, or pet service provider. No employment, agency, or partnership exists between PetAlong and any user.
 
-2. LIMITATION OF LIABILITY
-TO THE FULLEST EXTENT PERMITTED BY LAW, PETALONG SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES ARISING FROM YOUR USE OF THE PLATFORM. This includes but is not limited to: loss, injury, or death of animals; property damage; personal injury; financial loss; or disputes between users.
+2. ELIGIBILITY
+You must be at least 18 years of age to use PetAlong. By using the Platform, you confirm that you are 18 or older and have the legal capacity to enter into these Terms.
 
-3. USER RESPONSIBILITY
-You are solely responsible for: (a) verifying the identity and suitability of other users; (b) ensuring compliance with local laws regarding animal transport; (c) obtaining any required veterinary certificates, health certificates, or permits; (d) any arrangements, payments, or agreements made with other users.
+3. USER ACCOUNTS
+You may sign in using Facebook Login or phone verification. You are responsible for all activity under your account and for keeping your credentials secure. PetAlong may suspend or terminate accounts that violate these Terms.
 
-4. RELEASE OF LIABILITY
-By using PetAlong, you release PetAlong and its operators from any and all claims, demands, and damages arising from transactions or interactions with other users. This release covers all claims, known and unknown.
+4. USER CONTENT & LISTINGS
+All listings, messages, and content on PetAlong are created by users, not by PetAlong. PetAlong does not verify, endorse, or guarantee any user-generated content. PetAlong operates as an interactive computer service under 47 U.S.C. § 230 (Communications Decency Act) and is not liable for user-generated content. By posting content, you grant PetAlong a non-exclusive license to display it on the Platform.
 
-5. SECTION 230 NOTICE
-PetAlong operates as an interactive computer service under Section 230 of the Communications Decency Act. We are not the publisher or speaker of any user-generated content and are not liable for content posted by users.
+5. NO VERIFICATION OF USERS
+PetAlong does not conduct background checks or verify driver's licenses, vehicle insurance, professional certifications, or any other credentials. Community reviews are user-generated and not verified by PetAlong.
 
-6. NO WARRANTIES
-THE PLATFORM IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. We do not verify user identities beyond basic account creation, do not guarantee the accuracy of listings, and do not endorse any user.
+6. INDEPENDENT ARRANGEMENTS
+All arrangements are made directly between users. PetAlong is not a party to any arrangement. Users set their own prices. PetAlong does not process payments and is not responsible for financial disputes.
 
-7. PROHIBITED CONDUCT
-Users may not: post false or misleading information; use the platform for commercial transportation without proper licensing; engage in fraud or scam activity; harass other users; post content that violates applicable law.
+7. PROHIBITED USES
+You may not: transport animals illegally or in violation of any animal welfare law; post false or misleading listings; harass or threaten other users; commit fraud or scam activity; violate any applicable federal, state, or local law; or use automated bots or scrapers on the Platform.
 
-8. CONTACT
-For questions: contact@petalonggo.com`,
+8. DISCLAIMER OF WARRANTIES
+THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
+
+9. LIMITATION OF LIABILITY
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, PETALONG SHALL NOT BE LIABLE FOR: injury, illness, or death of any animal; property damage; personal injury; financial loss; acts or omissions of any user; or any transaction between users. PETALONG'S TOTAL LIABILITY SHALL NOT EXCEED THE GREATER OF $100 USD OR THE AMOUNT YOU PAID TO PETALONG IN THE PRIOR 12 MONTHS.
+
+10. INDEMNIFICATION
+You agree to defend, indemnify, and hold harmless PetAlong and its owners, officers, agents, and employees from any claims, damages, or expenses (including attorneys' fees) arising from your use of the Platform, your violation of these Terms, or any arrangement you make with another user.
+
+11. INTELLECTUAL PROPERTY
+All PetAlong branding, logos, and platform code are the property of PetAlong. You may not use our intellectual property without prior written permission.
+
+12. MODIFICATIONS
+PetAlong may update these Terms at any time. Continued use of the Platform after changes are posted constitutes acceptance. We will update the "Last updated" date when changes are made.
+
+13. GOVERNING LAW
+These Terms are governed by the laws of the State of Nebraska, USA, without regard to conflict of law provisions. Disputes shall be resolved exclusively in the state or federal courts of Lancaster County, Nebraska.
+
+14. CONTACT
+support@petalonggo.com
+petalonggo.com`,
 
     privacy:`PRIVACY POLICY — PetAlong
+Last updated: May 2026
 
-Last updated: May 2025
+We do not sell your personal information to third parties.
 
 1. INFORMATION WE COLLECT
-When you sign in with Facebook: your public name and profile photo. When you verify your phone: your phone number. When you post listings: the information you provide voluntarily.
+• Facebook Login: your public name and profile photo
+• Phone verification: your phone number (optional)
+• Listings: information you voluntarily provide (pet type, route, dates, photos)
+• Messages: content of in-app messages between users
+• Usage data: IP address, browser type, device info — collected automatically for security and analytics
 
 2. HOW WE USE YOUR INFORMATION
-To display your profile on listings you post. To facilitate contact between users. To verify your identity. We do not sell your personal information to third parties.
+To create and display your user profile. To show your listings in the Platform feed. To facilitate communication between users. To verify identity and reduce fraud. To improve and maintain the Platform. To enforce our Terms of Service.
 
 3. FACEBOOK LOGIN
-We use Facebook Login for authentication. We only request access to your public profile (name and photo). We do not access your Facebook friends, posts, messages, or other data.
+We use Facebook Login for authentication only. We access your public profile (name and photo) only. We do not access your Facebook friends, messages, or any other data. Your use of Facebook Login is also subject to Facebook's Privacy Policy at facebook.com/policy.
 
 4. PHONE VERIFICATION
-Your phone number is used solely for SMS verification. It is not displayed publicly unless you choose to share it in your listing.
+Optional. Your phone number is stored securely and shown as a "Phone Verified" badge on your profile. It is not displayed to other users. We may use a third-party SMS service (Twilio) to send verification codes.
 
-5. USER CONTENT
-Listings and messages you post may be visible to other users. You are responsible for the content you post.
+5. DATA SHARING
+We do not sell your data. We share only with: service providers (hosting, SMS) under confidentiality agreements; law enforcement if legally required; and new owners in a business acquisition subject to the same privacy protections.
 
-6. DATA RETENTION
-We retain your data for as long as your account is active. You may request deletion of your account and data at any time.
+6. PUBLIC INFORMATION
+Your listing content (pet type, route, dates, name, profile photo) is publicly visible to all users and to the public. Do not include sensitive personal information in your listings.
 
-7. COOKIES
-We use essential cookies for authentication and session management only.
+7. DATA RETENTION
+We retain your data while your account is active. Request deletion at: support@petalonggo.com. We process deletion requests within 30 days, except where required by law to retain certain information.
+
+8. COOKIES
+We use cookies for session management and analytics. You may disable cookies in your browser settings, though some features may not work without them.
+
+9. CHILDREN'S PRIVACY
+PetAlong is not for users under 18. We do not knowingly collect personal information from minors. If we discover a minor has provided data, we will delete it promptly.
+
+10. YOUR RIGHTS
+Depending on your location, you may have the right to: access your personal data; request correction of inaccurate data; request deletion; object to or restrict processing; withdraw consent. Contact: support@petalonggo.com
+
+11. SECURITY
+We take reasonable technical measures to protect your information. No method of internet transmission is 100% secure.
+
+12. CHANGES
+We may update this Policy at any time. Continued use constitutes acceptance. We will update the "Last updated" date when changes are made.
+
+13. CONTACT
+support@petalonggo.com
+petalonggo.com`,
+
+    disclaimer:`DISCLAIMER & RELEASE OF LIABILITY — PetAlong
+Last updated: May 2026
+
+READ CAREFULLY. By using PetAlong, you acknowledge and accept all risks associated with peer-to-peer pet transport arrangements. PetAlong is a neutral platform and assumes no responsibility for any outcome of arrangements made between users.
+
+1. PLATFORM ONLY — NOT A TRANSPORT SERVICE
+PetAlong is a technology platform only. We do not transport animals, employ drivers, operate vehicles, or hold any transport license, carrier authority, or professional certification of any kind. All transport arrangements are made directly and exclusively between users.
+
+2. NO WARRANTY FOR USER CONDUCT
+PetAlong does not screen, verify, license, certify, or approve any user on the Platform. We do not conduct criminal background checks, driving record checks, vehicle safety inspections, or insurance verifications. Any "verified" badge refers only to phone number or Facebook account identity — not to professional qualifications, character, or fitness to transport animals. You use information provided by other users entirely at your own risk.
+
+3. ASSUMPTION OF RISK
+BY USING PETALONG, YOU EXPRESSLY ASSUME ALL RISKS ASSOCIATED WITH:
+• The health, safety, injury, illness, or death of any animal during transport
+• Loss, theft, or damage to any animal or personal property
+• The conduct, negligence, or misconduct of any driver or pet owner
+• Any vehicle accident, breakdown, delay, or incident during transport
+• Any failure to comply with applicable laws or animal welfare requirements by any user
+
+4. RELEASE OF LIABILITY
+TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, YOU HEREBY RELEASE, DISCHARGE, AND HOLD HARMLESS PETALONG AND ITS OWNERS, OPERATORS, EMPLOYEES, AGENTS, SUCCESSORS, AND ASSIGNS FROM ANY AND ALL CLAIMS, DEMANDS, LOSSES, DAMAGES, AND LIABILITIES OF ANY KIND ARISING FROM:
+• Any arrangement made between you and another user
+• Any act or omission of any other user
+• Injury to or death of any animal in connection with any transport arrangement
+• Any property damage, personal injury, or financial loss arising from any transport arrangement
+
+5. NO PROFESSIONAL ADVICE
+Nothing on PetAlong constitutes veterinary, legal, insurance, or financial advice. Users are solely responsible for ensuring compliance with all applicable laws, including those governing interstate animal transport, import/export of animals, vaccination requirements, and applicable commercial transportation laws.
+
+6. INSURANCE
+PetAlong does not provide insurance of any kind for animals, vehicles, drivers, or pet owners. Users are strongly encouraged to obtain appropriate insurance coverage before entering into any transport arrangement. PetAlong is not responsible for any uninsured losses.
+
+7. DISPUTES BETWEEN USERS
+PetAlong is not responsible for and will not mediate disputes between users. Any dispute arising from a transport arrangement is solely between the users involved.
 
 8. CONTACT
-privacy@petalonggo.com`,
+support@petalonggo.com
+petalonggo.com`,
   },
   ru: {
     logo:"PetAlong", tagline:"Питомцы едут с теми, кто и так едет в ту сторону",
@@ -250,16 +331,18 @@ privacy@petalonggo.com`,
     aboutMission:"Наша миссия проста: сделать перевозку питомцев доступной, недорогой и безопасной для всех, соединяя людей которые и так делают этот путь.",
     termsTitle:"Условия использования",
     privacyTitle:"Политика конфиденциальности",
+    disclaimerTitle:"Дисклеймер",
     footer:{
       tagline:"Соединяем хозяев питомцев с водителями по пути.",
       platform:"Платформа",
       legal:"Правовая информация",
-      links:{about:"О нас",how:"Как это работает",browse:"Объявления",post:"Разместить",terms:"Условия использования",privacy:"Конфиденциальность",contact:"Контакт"},
+      links:{about:"О нас",how:"Как это работает",browse:"Объявления",post:"Разместить",terms:"Условия использования",privacy:"Конфиденциальность",disclaimer:"Дисклеймер",contact:"Контакт"},
       disclaimer:"PetAlong — нейтральная технологическая платформа. Мы не оказываем транспортные услуги. Все договорённости заключаются напрямую между пользователями. PetAlong не несёт ответственности за договорённости, транзакции, споры или результаты между пользователями.",
-      copyright:"© 2025 PetAlong. Бесплатная платформа сообщества.",
+      copyright:"© 2026 PetAlong. Бесплатная платформа сообщества.",
     },
     terms:`УСЛОВИЯ ИСПОЛЬЗОВАНИЯ — PetAlong\n\nСм. английскую версию / See English version`,
     privacy:`ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ — PetAlong\n\nСм. английскую версию / See English version`,
+    disclaimer:`ДИСКЛЕЙМЕР — PetAlong\n\nСм. английскую версию / See English version`,
   }
 };
 
@@ -302,7 +385,7 @@ const TrustBadges = ({l,t}:{l:Listing,t:typeof T.en}) => (
 );
 
 export default function App() {
-  const [lang,setLang] = useState<"en"|"ru">("en");
+  const [lang] = useState<"en"|"ru">("en");
   const [view,setView] = useState("home");
   const [filter,setFilter] = useState("all");
   const [filterCountry,setFilterCountry] = useState("all");
@@ -328,6 +411,24 @@ export default function App() {
   const [dF,setDF] = useState({from:"",to:"",date:"",cap:"",ph:"",rA:50,rB:50,openChat:true,openCalls:false,openSMS:false,notes:""});
   const photoRef = useRef<HTMLInputElement>(null);
   const t = T[lang];
+
+  // ─── GOOGLE TRANSLATE ──────────────────────────────────────────────────────
+  useEffect(() => {
+    const scriptId = "google-translate-script";
+    if (!document.getElementById(scriptId)) {
+      (window as any).googleTranslateElementInit = () => {
+        new (window as any).google.translate.TranslateElement(
+          { pageLanguage: "en", layout: 0 },
+          "google_translate_element"
+        );
+      };
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
 
   const filtered = MOCK.filter(l => {
     if(filter==="owner" && l.type!=="owner") return false;
@@ -355,8 +456,7 @@ export default function App() {
             </div>
           : <button onClick={()=>setShowLogin(true)} style={{background:"transparent",border:`1px solid ${C.border}`,borderRadius:100,padding:"6px 14px",color:C.muted,fontSize:12,cursor:"pointer",fontWeight:500}}>{t.signIn}</button>
         }
-        <button onClick={()=>setLang("en")} style={{background:lang==="en"?C.card:"transparent",border:`1px solid ${lang==="en"?C.orange:C.border}`,color:lang==="en"?C.orange:C.muted,padding:"5px 10px",borderRadius:100,fontSize:11,cursor:"pointer",fontWeight:600}}>EN</button>
-        <button onClick={()=>setLang("ru")} style={{background:lang==="ru"?C.card:"transparent",border:`1px solid ${lang==="ru"?C.orange:C.border}`,color:lang==="ru"?C.orange:C.muted,padding:"5px 10px",borderRadius:100,fontSize:11,cursor:"pointer",fontWeight:600}}>RU</button>
+        <div id="google_translate_element" style={{fontSize:11,lineHeight:1,minWidth:50}}></div>
       </div>
     </nav>
   );
@@ -372,15 +472,15 @@ export default function App() {
           <div>
             <div style={{fontSize:11,letterSpacing:"1.5px",textTransform:"uppercase" as const,color:C.muted2,marginBottom:12,fontWeight:600}}>{t.footer.platform}</div>
             {[["about","About"],["how","How it works"],["feed","Browse listings"],["owner","Post a listing"]].map(([v,l])=>(
-              <div key={v} onClick={()=>nav(v)} style={{fontSize:14,color:C.muted,marginBottom:8,cursor:"pointer"}}>{lang==="en"?l:Object.values(t.footer.links)[["about","how","browse","post"].indexOf(v)]||l}</div>
+              <div key={v} onClick={()=>nav(v)} style={{fontSize:14,color:C.muted,marginBottom:8,cursor:"pointer"}}>{l}</div>
             ))}
           </div>
           <div>
             <div style={{fontSize:11,letterSpacing:"1.5px",textTransform:"uppercase" as const,color:C.muted2,marginBottom:12,fontWeight:600}}>{t.footer.legal}</div>
-            {[["terms",t.footer.links.terms],["privacy",t.footer.links.privacy]].map(([v,l])=>(
+            {[["terms",t.footer.links.terms],["privacy",t.footer.links.privacy],["disclaimer",t.footer.links.disclaimer]].map(([v,l])=>(
               <div key={v} onClick={()=>nav(v)} style={{fontSize:14,color:C.muted,marginBottom:8,cursor:"pointer"}}>{l}</div>
             ))}
-            <div style={{fontSize:14,color:C.muted,marginBottom:8}}>contact@petalonggo.com</div>
+            <div style={{fontSize:14,color:C.muted,marginBottom:8}}>support@petalonggo.com</div>
           </div>
         </div>
         <div style={{borderTop:`1px solid ${C.border2}`,paddingTop:20}}>
@@ -666,7 +766,7 @@ export default function App() {
             </select>
             <select value={filterPet} onChange={e=>setFilterPet(e.target.value)} style={{...INP,flex:1,minWidth:100,padding:"8px 12px",fontSize:13}}>
               <option value="all">🐾 {t.filterAll}</option>
-              {PET_TYPES.map(p=><option key={p.en} value={p.en}>{p.icon} {lang==="en"?p.en:p.ru}</option>)}
+              {PET_TYPES.map(p=><option key={p.en} value={p.en}>{p.icon} {p.en}</option>)}
             </select>
           </div>
         </div>
@@ -707,7 +807,7 @@ export default function App() {
           <div style={{display:"flex",gap:8,flexWrap:"wrap" as const}}>
             {PET_TYPES.map(p=>(
               <button key={p.en} onClick={()=>setOF({...oF,petType:p.en})} style={{padding:"8px 14px",borderRadius:100,border:`1px solid ${oF.petType===p.en?C.orange:C.border}`,background:oF.petType===p.en?"rgba(240,160,48,.15)":"transparent",color:oF.petType===p.en?C.orange:C.muted,fontSize:13,cursor:"pointer"}}>
-                {p.icon} {lang==="en"?p.en:p.ru}
+                {p.icon} {p.en}
               </button>
             ))}
           </div>
@@ -833,7 +933,7 @@ export default function App() {
           )}
         </div>
         <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:20,marginBottom:16}}>
-          <div style={{fontWeight:700,fontSize:15,marginBottom:14,color:C.muted,letterSpacing:"1px",textTransform:"uppercase" as const,fontSize:11}}>Active listing</div>
+          <div style={{fontWeight:700,fontSize:11,marginBottom:14,color:C.muted,letterSpacing:"1px",textTransform:"uppercase" as const}}>Active listing</div>
           <ListingCard l={profileUser}/>
         </div>
         <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:20}}>
@@ -871,7 +971,7 @@ export default function App() {
           <div style={{display:"flex",gap:8,flexWrap:"wrap" as const}}>
             <span style={{fontSize:11,background:"rgba(88,166,255,.15)",color:C.blue,padding:"3px 10px",borderRadius:100,fontWeight:600}}>f {t.fbConnected}</span>
             <span style={{fontSize:11,background:"rgba(63,185,80,.15)",color:C.green,padding:"3px 10px",borderRadius:100,fontWeight:600}}>📱 {t.phoneVerified}</span>
-            <span style={{fontSize:11,background:"rgba(139,148,158,.1)",color:C.muted,padding:"3px 10px",borderRadius:100}}>{t.memberSince} 2025</span>
+            <span style={{fontSize:11,background:"rgba(139,148,158,.1)",color:C.muted,padding:"3px 10px",borderRadius:100}}>{t.memberSince} 2026</span>
           </div>
         </div>
         <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:20,marginBottom:16}}>
@@ -934,6 +1034,24 @@ export default function App() {
         <div style={{fontWeight:900,fontSize:28,letterSpacing:-1,marginBottom:24,color:C.white}}>{t.privacyTitle}</div>
         <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:28}}>
           <pre style={{fontSize:14,color:"#c9d1d9",lineHeight:1.8,whiteSpace:"pre-wrap" as const,fontFamily:"inherit"}}>{t.privacy}</pre>
+        </div>
+      </div>
+      <Footer/>
+    </div>
+  );
+
+  // DISCLAIMER
+  if(view==="disclaimer") return (
+    <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"'DM Sans',system-ui,sans-serif"}}>
+      <NavBar/>
+      <div style={{maxWidth:720,margin:"0 auto",padding:"48px 24px 80px"}}>
+        <BackBtn to="home"/>
+        <div style={{fontWeight:900,fontSize:28,letterSpacing:-1,marginBottom:24,color:C.white}}>{t.disclaimerTitle}</div>
+        <div style={{background:"rgba(248,81,73,.06)",border:`1px solid rgba(248,81,73,.3)`,borderRadius:12,padding:"14px 20px",marginBottom:20,fontSize:13,color:"#f85149",fontWeight:600,lineHeight:1.6}}>
+          ⚠️ Read carefully before using PetAlong. By using this platform you accept all terms below.
+        </div>
+        <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:28}}>
+          <pre style={{fontSize:14,color:"#c9d1d9",lineHeight:1.8,whiteSpace:"pre-wrap" as const,fontFamily:"inherit"}}>{t.disclaimer}</pre>
         </div>
       </div>
       <Footer/>
