@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
-// ─── SUPABASE ─────────────────────────────────────────────────────────────────
 const SUPABASE_URL = "https://ufapgzdeupqjmzhlpmts.supabase.co";
 const SUPABASE_KEY = "sb_publishable_Pd7_o9ORSkShf1D4-nZkgA_VeBKLiVj";
 
@@ -35,7 +34,6 @@ async function uploadPhoto(file: File): Promise<string | null> {
   return `${SUPABASE_URL}/storage/v1/object/public/pet-photos/${fileName}`;
 }
 
-// ─── COLORS ───────────────────────────────────────────────────────────────────
 const C = {
   bg: "#0d1117", card: "#161b22", card2: "#1c2128",
   border: "#30363d", border2: "#21262d",
@@ -71,7 +69,13 @@ interface Listing {
   pet_photo?: string; created_at: string;
 }
 
-// ─── ALL COMPONENTS DEFINED OUTSIDE APP (fixes focus loss bug) ───────────────
+// Open Google Maps directions in new tab
+const openMaps = (a: string, b: string) => {
+  const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(a)}&destination=${encodeURIComponent(b)}&travelmode=driving`;
+  window.open(url, "_blank");
+};
+
+// ── OUTSIDE-APP COMPONENTS (prevents focus loss on typing) ───────────────────
 
 const Stars = ({rating}:{rating:number}) => (
   <span style={{color:C.yellow,fontSize:13}}>
@@ -81,25 +85,20 @@ const Stars = ({rating}:{rating:number}) => (
 
 const TrustBadges = ({l}:{l:Listing}) => (
   <div style={{display:"flex",gap:6,flexWrap:"wrap" as const,marginTop:4}}>
-    {l.fb_connected && <span style={{fontSize:10,background:"rgba(88,166,255,.15)",color:C.blue,padding:"2px 8px",borderRadius:100,fontWeight:600}}>f Facebook connected</span>}
-    {l.phone_verified && <span style={{fontSize:10,background:"rgba(63,185,80,.15)",color:C.green,padding:"2px 8px",borderRadius:100,fontWeight:600}}>📱 Phone verified</span>}
+    {l.fb_connected&&<span style={{fontSize:10,background:"rgba(88,166,255,.15)",color:C.blue,padding:"2px 8px",borderRadius:100,fontWeight:600}}>f Facebook connected</span>}
+    {l.phone_verified&&<span style={{fontSize:10,background:"rgba(63,185,80,.15)",color:C.green,padding:"2px 8px",borderRadius:100,fontWeight:600}}>📱 Phone verified</span>}
     <span style={{fontSize:10,background:"rgba(139,148,158,.1)",color:C.muted,padding:"2px 8px",borderRadius:100}}>Member since {l.member_since}</span>
   </div>
 );
 
-// ── Field — MUST be outside App to prevent focus loss ──
 const Field = ({label,ph,val,onChange,type="text",multiline=false}:{label:string,ph:string,val:string,onChange:(v:string)=>void,type?:string,multiline?:boolean}) => (
   <div style={{marginBottom:16}}>
-    {label && <div style={{fontSize:10,letterSpacing:"1.5px",textTransform:"uppercase" as const,color:C.muted,marginBottom:7,fontWeight:600}}>{label}</div>}
+    {label&&<div style={{fontSize:10,letterSpacing:"1.5px",textTransform:"uppercase" as const,color:C.muted,marginBottom:7,fontWeight:600}}>{label}</div>}
     {multiline
-      ? <textarea placeholder={ph} value={val} onChange={e=>onChange(e.target.value)} rows={3} style={{...INP,resize:"none" as const}}/>
-      : <input
-          type={type} placeholder={ph} value={val}
-          onChange={e=>onChange(e.target.value)}
-          style={INP}
+      ?<textarea placeholder={ph} value={val} onChange={e=>onChange(e.target.value)} rows={3} style={{...INP,resize:"none" as const}}/>
+      :<input type={type} placeholder={ph} value={val} onChange={e=>onChange(e.target.value)} style={INP}
           onFocus={e=>{e.target.style.borderColor=C.orange;e.target.style.boxShadow=`0 0 0 3px rgba(240,160,48,.15)`;}}
-          onBlur={e=>{e.target.style.borderColor="#d0d7de";e.target.style.boxShadow="none";}}
-        />
+          onBlur={e=>{e.target.style.borderColor="#d0d7de";e.target.style.boxShadow="none";}}/>
     }
   </div>
 );
@@ -108,7 +107,7 @@ const Toggle = ({label,sub,checked,onChange}:{label:string,sub?:string,checked:b
   <div onClick={onChange} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 14px",background:C.card,border:`1px solid ${checked?C.green:C.border}`,borderRadius:10,marginBottom:10,cursor:"pointer"}}>
     <div>
       <div style={{fontSize:14,color:C.white,fontWeight:500}}>{label}</div>
-      {sub && <div style={{fontSize:12,color:C.muted,marginTop:2}}>{sub}</div>}
+      {sub&&<div style={{fontSize:12,color:C.muted,marginTop:2}}>{sub}</div>}
     </div>
     <div style={{width:42,height:22,borderRadius:11,background:checked?C.green:C.border,position:"relative",flexShrink:0,transition:"background .2s"}}>
       <div style={{width:16,height:16,borderRadius:"50%",background:C.white,position:"absolute",top:3,left:checked?23:3,transition:"left .2s"}}/>
@@ -121,6 +120,15 @@ const Divider = ({label}:{label:string}) => (
     <div style={{flex:1,height:1,background:C.border}}/>
     <span style={{fontSize:10,letterSpacing:"2px",textTransform:"uppercase" as const,color:C.muted2,fontWeight:600,whiteSpace:"nowrap" as const}}>{label}</span>
     <div style={{flex:1,height:1,background:C.border}}/>
+  </div>
+);
+
+const RouteArrow = ({from,to,onMap}:{from:string,to:string,onMap:()=>void}) => (
+  <div style={{display:"flex",alignItems:"center",gap:8,margin:"8px 0 16px",padding:"10px 14px",background:"rgba(63,185,80,.06)",border:`1px solid rgba(63,185,80,.2)`,borderRadius:10}}>
+    <span style={{fontSize:13,color:C.white,fontWeight:600,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" as const}}>{from||"Pickup"}</span>
+    <span style={{color:C.orange,fontSize:18,flexShrink:0}}>→</span>
+    <span style={{fontSize:13,color:C.white,fontWeight:600,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" as const,textAlign:"right" as const}}>{to||"Delivery"}</span>
+    {from&&to&&<button onClick={onMap} style={{background:C.green,border:"none",borderRadius:8,padding:"5px 10px",color:"#000",fontSize:11,cursor:"pointer",fontWeight:700,flexShrink:0}}>🗺 Map</button>}
   </div>
 );
 
@@ -144,18 +152,6 @@ const SubmitBtn = ({label,onClick,disabled=false}:{label:string,onClick:()=>void
   </button>
 );
 
-const TESTIMONIALS = [
-  {name:"Sarah M.",location:"Lincoln, NE → Dallas, TX",pet:"Golden Retriever",text:"Found a driver going exactly our route within 2 days. Buddy arrived happy and safe. Saved us over $800!",avatar:"🐕",rating:5},
-  {name:"Anna K.",location:"Berlin → Munich",pet:"Persian Cat",text:"Luna gets anxious in cargo. With PetAlong she rode in the cabin the whole way. The driver sent updates every hour.",avatar:"🐈",rating:5},
-  {name:"Carlos M.",location:"Phoenix, AZ → Houston, TX",pet:"Parrot",text:"Didn't think anyone would take a parrot but found a bird lover driver in 3 days. Raven loved the trip!",avatar:"🦜",rating:5},
-  {name:"Mike D.",location:"Chicago, IL → Miami, FL",pet:"Driver",text:"As a driver I've taken 6 pets so far. Great extra income on trips I was already making. Simple platform.",avatar:"🚐",rating:5},
-  {name:"Jennifer L.",location:"Denver, CO → Los Angeles",pet:"Labrador",text:"Max is 80lbs so flying wasn't an option. PetAlong matched us with an SUV driver in 4 days. Best experience.",avatar:"🐕",rating:5},
-];
-
-const openMaps = (a: string, b: string) =>
-  window.open(`https://www.google.com/maps/dir/${encodeURIComponent(a)}/${encodeURIComponent(b)}`, "_blank");
-
-// ─── COUNTRY PICKER — outside App ────────────────────────────────────────────
 const CountryPicker = ({selected,onSelect}:{selected:string,onSelect:(c:string)=>void}) => {
   const [open,setOpen] = useState(false);
   const [search,setSearch] = useState("");
@@ -165,9 +161,9 @@ const CountryPicker = ({selected,onSelect}:{selected:string,onSelect:(c:string)=
       <div style={{fontSize:10,letterSpacing:"1.5px",textTransform:"uppercase" as const,color:C.muted,marginBottom:7,fontWeight:600}}>🌍 Country</div>
       <div onClick={()=>setOpen(!open)} style={{...INP,display:"flex",alignItems:"center",justifyContent:"space-between",cursor:"pointer",userSelect:"none" as const}}>
         <span style={{color:"#1a1a1a",fontWeight:500}}>{selected}</span>
-        <span style={{color:"#444",fontSize:20,lineHeight:1,fontWeight:400}}>⌄</span>
+        <span style={{color:"#444",fontSize:20,lineHeight:1}}>⌄</span>
       </div>
-      {open && (
+      {open&&(
         <div style={{position:"absolute",top:"100%",left:0,right:0,background:"#fff",border:`2px solid ${C.orange}`,borderRadius:10,zIndex:100,maxHeight:240,overflowY:"auto" as const,boxShadow:"0 8px 32px rgba(0,0,0,.4)"}}>
           <input autoFocus placeholder="Search country..." value={search} onChange={e=>setSearch(e.target.value)} style={{...INP,borderRadius:"8px 8px 0 0",borderLeft:"none",borderRight:"none",borderTop:"none"}}/>
           {filtered.map(c=>(
@@ -181,18 +177,17 @@ const CountryPicker = ({selected,onSelect}:{selected:string,onSelect:(c:string)=
   );
 };
 
-// ─── LISTING CARD — outside App ───────────────────────────────────────────────
 const ListingCard = ({l,onChat,onProfile,onReport,loggedIn,showLogin}:{l:Listing,onChat:(l:Listing)=>void,onProfile:(l:Listing)=>void,onReport:(l:Listing)=>void,loggedIn:boolean,showLogin:()=>void}) => (
   <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:18,padding:"18px 20px",marginBottom:12}}>
     <div style={{display:"flex",gap:12,alignItems:"flex-start"}}>
       {l.pet_photo
-        ? <img src={l.pet_photo} alt="pet" style={{width:52,height:52,borderRadius:12,objectFit:"cover" as const,flexShrink:0}}/>
-        : <div style={{fontSize:28,marginTop:2,flexShrink:0}}>{l.avatar}</div>
+        ?<img src={l.pet_photo} alt="pet" style={{width:52,height:52,borderRadius:12,objectFit:"cover" as const,flexShrink:0}}/>
+        :<div style={{fontSize:28,marginTop:2,flexShrink:0}}>{l.avatar}</div>
       }
       <div style={{flex:1,minWidth:0}}>
         <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,flexWrap:"wrap" as const}}>
           <span style={{fontWeight:800,fontSize:16,color:C.white}}>{l.from_location.split(",")[0]}</span>
-          <span style={{color:C.muted2}}>→</span>
+          <span style={{color:C.orange,fontSize:18}}>→</span>
           <span style={{fontWeight:800,fontSize:16,color:C.white}}>{l.to_location.split(",")[0]}</span>
           <span style={{fontSize:11,background:"rgba(139,148,158,.12)",color:C.muted,padding:"2px 8px",borderRadius:100}}>🌍 {l.country}</span>
         </div>
@@ -223,8 +218,7 @@ const ListingCard = ({l,onChat,onProfile,onReport,loggedIn,showLogin}:{l:Listing
   </div>
 );
 
-// ─── NAV BAR — outside App ────────────────────────────────────────────────────
-const NavBar = ({onHome,onPost,onProfile,loggedIn,showPost=false}:{onHome:()=>void,onPost:()=>void,onProfile:()=>void,loggedIn:boolean,showPost?:boolean}) => (
+const NavBar = ({onHome,onPost,onProfile,onSignIn,loggedIn,showPost=false}:{onHome:()=>void,onPost:()=>void,onProfile:()=>void,onSignIn:()=>void,loggedIn:boolean,showPost?:boolean}) => (
   <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 20px",borderBottom:`1px solid ${C.border2}`,position:"sticky",top:0,background:"rgba(13,17,23,0.97)",backdropFilter:"blur(14px)",zIndex:200}}>
     <div onClick={onHome} style={{fontWeight:900,fontSize:20,cursor:"pointer",letterSpacing:-0.5,color:C.white}} translate="no">
       Pet<span style={{color:C.orange}}>Along</span>
@@ -232,15 +226,14 @@ const NavBar = ({onHome,onPost,onProfile,loggedIn,showPost=false}:{onHome:()=>vo
     <div style={{display:"flex",gap:8,alignItems:"center"}}>
       {showPost&&<button onClick={onPost} style={{background:C.orange,border:"none",borderRadius:100,padding:"7px 14px",color:C.bg,fontWeight:700,fontSize:12,cursor:"pointer"}}>+ Post</button>}
       {loggedIn
-        ? <div onClick={onProfile} style={{width:32,height:32,borderRadius:"50%",background:`linear-gradient(135deg,${C.orange},${C.red})`,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:13,fontWeight:700,color:C.bg}}>V</div>
-        : null
+        ?<div onClick={onProfile} style={{width:32,height:32,borderRadius:"50%",background:`linear-gradient(135deg,${C.orange},${C.red})`,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:13,fontWeight:700,color:C.bg}}>V</div>
+        :<button onClick={onSignIn} style={{background:"transparent",border:`1px solid ${C.border}`,borderRadius:100,padding:"6px 14px",color:C.muted,fontSize:13,cursor:"pointer",fontWeight:500}}>Sign in</button>
       }
-      <div id="google_translate_element" style={{fontSize:11,minWidth:50}}></div>
+      <div id="google_translate_element" style={{fontSize:11,minWidth:40}}></div>
     </div>
   </nav>
 );
 
-// ─── FOOTER — outside App ─────────────────────────────────────────────────────
 const Footer = ({onNav}:{onNav:(v:string)=>void}) => (
   <footer style={{borderTop:`1px solid ${C.border2}`,background:C.card,padding:"40px 24px 24px",marginTop:40}}>
     <div style={{maxWidth:900,margin:"0 auto"}}>
@@ -271,14 +264,21 @@ const Footer = ({onNav}:{onNav:(v:string)=>void}) => (
   </footer>
 );
 
-// ─── LEGAL TEXT ───────────────────────────────────────────────────────────────
-const TERMS=`TERMS OF SERVICE — PetAlong\nLast updated: May 2026\n\nIMPORTANT: PetAlong is a neutral online marketplace — NOT a transportation company. We do not transport animals, employ drivers, or provide transportation services.\n\n1. ABOUT PETALONG\nPetAlong is an online marketplace connecting pet owners with drivers for peer-to-peer transport. We act solely as a neutral technology platform. No employment, agency, or partnership exists between PetAlong and any user.\n\n2. ELIGIBILITY\nYou must be at least 18 years of age to use PetAlong.\n\n3. USER ACCOUNTS\nYou may sign in using Facebook Login or phone verification. You are responsible for all activity under your account.\n\n4. USER CONTENT & LISTINGS\nAll listings are created by users. PetAlong operates under 47 U.S.C. § 230 (Communications Decency Act) and is not liable for user-generated content.\n\n5. NO VERIFICATION OF USERS\nPetAlong does not conduct background checks or verify licenses, insurance, or credentials.\n\n6. INDEPENDENT ARRANGEMENTS\nAll arrangements are made directly between users. Users set their own prices. PetAlong does not process payments.\n\n7. PROHIBITED USES\nYou may not: transport animals illegally; post false listings; harass users; commit fraud; violate any law.\n\n8. DISCLAIMER OF WARRANTIES\nTHE PLATFORM IS PROVIDED "AS IS" WITHOUT ANY WARRANTIES.\n\n9. LIMITATION OF LIABILITY\nPETALONG SHALL NOT BE LIABLE FOR injury or death of animals, property damage, acts of any user, or financial loss. TOTAL LIABILITY SHALL NOT EXCEED $100 USD.\n\n10. GOVERNING LAW\nGoverned by the laws of the State of Nebraska, USA.\n\n11. CONTACT\nsupport@petalonggo.com`;
+const TERMS=`TERMS OF SERVICE — PetAlong\nLast updated: May 2026\n\nIMPORTANT: PetAlong is a neutral online marketplace — NOT a transportation company.\n\n1. ABOUT PETALONG\nPetAlong connects pet owners with drivers for peer-to-peer transport. We are a neutral technology platform. No employment or partnership exists between PetAlong and any user.\n\n2. ELIGIBILITY\nYou must be at least 18 years of age.\n\n3. USER CONTENT & LISTINGS\nAll listings are created by users. PetAlong operates under 47 U.S.C. § 230 (CDA) and is not liable for user-generated content.\n\n4. NO VERIFICATION OF USERS\nPetAlong does not conduct background checks or verify licenses, insurance, or credentials.\n\n5. INDEPENDENT ARRANGEMENTS\nAll arrangements are made directly between users. Users set their own prices.\n\n6. LIMITATION OF LIABILITY\nPETALONG SHALL NOT BE LIABLE FOR injury or death of animals, property damage, or acts of any user. TOTAL LIABILITY SHALL NOT EXCEED $100 USD.\n\n7. GOVERNING LAW\nGoverned by the laws of the State of Nebraska, USA.\n\n8. CONTACT\nsupport@petalonggo.com`;
 
-const PRIVACY=`PRIVACY POLICY — PetAlong\nLast updated: May 2026\n\nWe do not sell your personal information.\n\n1. INFORMATION WE COLLECT\n• Facebook Login: your public name and profile photo\n• Phone verification: your phone number (optional)\n• Listings: information you voluntarily provide\n• Usage data: IP address, browser type (automatic)\n\n2. HOW WE USE YOUR INFORMATION\nTo display your profile and listings. To facilitate contact between users. To verify identity. To enforce our Terms.\n\n3. FACEBOOK LOGIN\nAuthentication only. We access your public name and photo only.\n\n4. DATA SHARING\nWe do not sell data. We share only with service providers or if legally required.\n\n5. DATA RETENTION\nRequest deletion: support@petalonggo.com\n\n6. YOUR RIGHTS\nAccess, correct, or delete your data. Contact: support@petalonggo.com\n\n7. CONTACT\nsupport@petalonggo.com`;
+const PRIVACY=`PRIVACY POLICY — PetAlong\nLast updated: May 2026\n\nWe do not sell your personal information.\n\n1. INFORMATION WE COLLECT\n• Facebook Login: your public name and profile photo\n• Phone verification: your phone number (optional)\n• Listings: information you voluntarily provide\n\n2. HOW WE USE YOUR INFORMATION\nTo display your profile and listings. To facilitate contact between users.\n\n3. DATA SHARING\nWe do not sell data. We share only with service providers or if legally required.\n\n4. YOUR RIGHTS\nAccess, correct, or delete your data. Contact: support@petalonggo.com\n\n5. CONTACT\nsupport@petalonggo.com`;
 
-const DISCLAIMER=`DISCLAIMER & RELEASE OF LIABILITY — PetAlong\nLast updated: May 2026\n\nREAD CAREFULLY. By using PetAlong you accept all risks.\n\n1. PLATFORM ONLY\nPetAlong is a technology platform. We do not transport animals or employ drivers.\n\n2. NO WARRANTY FOR USER CONDUCT\nWe do not screen or verify users. "Verified" badges confirm identity only — not qualifications.\n\n3. ASSUMPTION OF RISK\nYOU ASSUME ALL RISKS INCLUDING:\n• Injury, illness, or death of any animal\n• Loss or damage to any property\n• Negligence of any user\n• Vehicle accidents or delays\n\n4. RELEASE OF LIABILITY\nYOU RELEASE PETALONG FROM ALL CLAIMS ARISING FROM ANY ARRANGEMENT BETWEEN USERS.\n\n5. INSURANCE\nPetAlong provides no insurance. Obtain your own coverage.\n\n6. CONTACT\nsupport@petalonggo.com`;
+const DISCLAIMER=`DISCLAIMER & RELEASE OF LIABILITY — PetAlong\nLast updated: May 2026\n\nREAD CAREFULLY.\n\n1. PLATFORM ONLY\nPetAlong is a technology platform only. We do not transport animals or employ drivers.\n\n2. NO WARRANTY FOR USER CONDUCT\nWe do not screen or verify users.\n\n3. ASSUMPTION OF RISK\nYOU ASSUME ALL RISKS INCLUDING:\n• Injury, illness, or death of any animal\n• Loss or damage to any property\n• Negligence of any user\n\n4. RELEASE OF LIABILITY\nYOU RELEASE PETALONG FROM ALL CLAIMS ARISING FROM ANY ARRANGEMENT BETWEEN USERS.\n\n5. INSURANCE\nPetAlong provides no insurance. Obtain your own coverage.\n\n6. CONTACT\nsupport@petalonggo.com`;
 
-// ─── MAIN APP ─────────────────────────────────────────────────────────────────
+const TESTIMONIALS = [
+  {name:"Sarah M.",location:"Lincoln, NE → Dallas, TX",pet:"Golden Retriever",text:"Found a driver going exactly our route within 2 days. Buddy arrived happy and safe. Saved us over $800!",avatar:"🐕",rating:5},
+  {name:"Anna K.",location:"Berlin → Munich",pet:"Persian Cat",text:"Luna gets anxious in cargo. With PetAlong she rode in the cabin the whole way. Driver sent updates every hour.",avatar:"🐈",rating:5},
+  {name:"Carlos M.",location:"Phoenix, AZ → Houston, TX",pet:"Parrot",text:"Didn't think anyone would take a parrot but found a bird lover driver in 3 days!",avatar:"🦜",rating:5},
+  {name:"Mike D.",location:"Chicago → Miami",pet:"Driver",text:"As a driver I've taken 6 pets so far. Great extra income on trips I was already making.",avatar:"🚐",rating:5},
+  {name:"Jennifer L.",location:"Denver, CO → Los Angeles",pet:"Labrador",text:"Max is 80lbs so flying wasn't an option. PetAlong matched us with an SUV driver in 4 days.",avatar:"🐕",rating:5},
+];
+
+// ── MAIN APP ──────────────────────────────────────────────────────────────────
 export default function App() {
   const [view, setView] = useState("home");
   const scrollPos = useRef<Record<string,number>>({});
@@ -303,63 +303,71 @@ export default function App() {
   const [profileUser, setProfileUser] = useState<Listing|null>(null);
   const [country, setCountry] = useState("USA");
   const [posting, setPosting] = useState(false);
-  const [oFrom, setOFrom] = useState("");
-  const [oTo, setOTo] = useState("");
-  const [oName, setOName] = useState("");
-  const [oWeight, setOWeight] = useState("");
-  const [oPetType, setOPetType] = useState("Dog");
-  const [oD1, setOD1] = useState("");
-  const [oD2, setOD2] = useState("");
-  const [oPh, setOPh] = useState("");
-  const [oChat, setOChat] = useState(true);
-  const [oCalls, setOCalls] = useState(false);
-  const [oSMS, setOSMS] = useState(false);
-  const [oNotes, setONotes] = useState("");
-  const [dFrom, setDFrom] = useState("");
-  const [dTo, setDTo] = useState("");
-  const [dDate, setDDate] = useState("");
-  const [dCap, setDCap] = useState("");
-  const [dPh, setDPh] = useState("");
-  const [dRA, setDRA] = useState(50);
-  const [dRB, setDRB] = useState(50);
-  const [dChat, setDChat] = useState(true);
-  const [dCalls, setDCalls] = useState(false);
-  const [dSMS, setDSMS] = useState(false);
-  const [dNotes, setDNotes] = useState("");
+  // Owner form
+  const [oFrom,setOFrom] = useState("");
+  const [oTo,setOTo] = useState("");
+  const [oName,setOName] = useState("");
+  const [oWeight,setOWeight] = useState("");
+  const [oPetType,setOPetType] = useState("Dog");
+  const [oD1,setOD1] = useState("");
+  const [oD2,setOD2] = useState("");
+  const [oPh,setOPh] = useState("");
+  const [oChat,setOChat] = useState(true);
+  const [oCalls,setOCalls] = useState(false);
+  const [oSMS,setOSMS] = useState(false);
+  const [oNotes,setONotes] = useState("");
+  // Driver form
+  const [dFrom,setDFrom] = useState("");
+  const [dTo,setDTo] = useState("");
+  const [dDate,setDDate] = useState("");
+  const [dCap,setDCap] = useState("");
+  const [dPh,setDPh] = useState("");
+  const [dRA,setDRA] = useState(50);
+  const [dRB,setDRB] = useState(50);
+  const [dChat,setDChat] = useState(true);
+  const [dCalls,setDCalls] = useState(false);
+  const [dSMS,setDSMS] = useState(false);
+  const [dNotes,setDNotes] = useState("");
   const photoRef = useRef<HTMLInputElement>(null);
 
-  // Google Translate
+  // Google Translate — stable init
   useEffect(() => {
+    const initTranslate = () => {
+      if ((window as any).google?.translate) {
+        new (window as any).google.translate.TranslateElement({pageLanguage:"en",layout:0},"google_translate_element");
+      }
+    };
     const id = "google-translate-script";
     if (!document.getElementById(id)) {
-      (window as any).googleTranslateElementInit = () => {
-        new (window as any).google.translate.TranslateElement({pageLanguage:"en",layout:0},"google_translate_element");
-      };
+      (window as any).googleTranslateElementInit = initTranslate;
       const s = document.createElement("script");
       s.id = id; s.async = true;
       s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+      s.onerror = () => console.log("Google Translate unavailable");
       document.body.appendChild(s);
+    } else {
+      setTimeout(initTranslate, 500);
     }
   }, []);
 
-  // Browser back/forward support
+  // Browser history
   useEffect(() => {
     window.history.replaceState({view:"home"},"","");
     const onPop = (e: PopStateEvent) => {
-      const v = e.state?.view || "home";
+      const v = e.state?.view||"home";
       setView(v);
-      setTimeout(()=>window.scrollTo(0, scrollPos.current[v]||0),50);
+      setTimeout(()=>window.scrollTo(0,scrollPos.current[v]||0),50);
     };
-    window.addEventListener("popstate", onPop);
-    return ()=>window.removeEventListener("popstate", onPop);
-  }, []);
+    window.addEventListener("popstate",onPop);
+    return ()=>window.removeEventListener("popstate",onPop);
+  },[]);
 
-  const nav = useCallback((v: string) => {
+  const nav = useCallback((v:string) => {
     scrollPos.current[view] = window.scrollY;
     window.history.pushState({view:v},"","");
     setView(v);
-    setTimeout(()=>window.scrollTo(0, scrollPos.current[v]||0),50);
-  }, [view]);
+    setTimeout(()=>window.scrollTo(0,scrollPos.current[v]||0),50);
+  },[view]);
 
   const loadListings = async () => {
     setLoading(true);
@@ -369,22 +377,22 @@ export default function App() {
     } catch(e){console.error(e);}
     setLoading(false);
   };
-
   useEffect(()=>{loadListings();},[]);
 
   const postOwner = async () => {
     if(!oFrom||!oTo){alert("Please enter pickup and delivery locations");return;}
     setPosting(true);
     try {
-      let photoUrl = null;
-      if(petPhotoFile) photoUrl = await uploadPhoto(petPhotoFile);
+      let photoUrl=null;
+      if(petPhotoFile) photoUrl=await uploadPhoto(petPhotoFile);
       await sbFetch("/listings",{method:"POST",body:JSON.stringify({
         type:"owner",from_location:oFrom,to_location:oTo,country,
         animal_name:oName,pet_type:oPetType,weight:Number(oWeight)||0,
         date_from:oD1,date_to:oD2,avatar:PET_ICONS[oPetType]||"🐾",
         open_chat:oChat,open_calls:oCalls,open_sms:oSMS,
         phone:oPh,notes:oNotes,pet_photo:photoUrl,
-        user_name:"Guest",fb_connected:false,phone_verified:false,
+        user_name:loggedIn?"Verified User":"Guest",
+        fb_connected:loggedIn,phone_verified:false,
         member_since:"2026",rating:5.0,reviews:0,
       })});
       nav("posted");
@@ -401,7 +409,8 @@ export default function App() {
         weight:Number(dCap)||0,date_from:dDate,avatar:"🚐",
         open_chat:dChat,open_calls:dCalls,open_sms:dSMS,
         phone:dPh,notes:dNotes,radius_from:dRA,radius_to:dRB,
-        user_name:"Guest",fb_connected:false,phone_verified:false,
+        user_name:loggedIn?"Verified User":"Guest",
+        fb_connected:loggedIn,phone_verified:false,
         member_since:"2026",rating:5.0,reviews:0,
       })});
       nav("posted");
@@ -422,24 +431,24 @@ export default function App() {
   );
 
   const LoginModal = () => (
-    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:300,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>{setShowLogin(false);setLoginStep("main");}}>
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.88)",zIndex:300,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>{setShowLogin(false);setLoginStep("main");}}>
       <div onClick={e=>e.stopPropagation()} style={{background:C.card2,border:`1px solid ${C.border}`,borderRadius:20,padding:32,width:"100%",maxWidth:380}}>
         {loginStep==="main"&&<>
           <div style={{fontWeight:800,fontSize:22,marginBottom:6,color:C.white}}>Join PetAlong</div>
-          <div style={{fontSize:14,color:C.muted,marginBottom:24}}>Sign in to post listings or contact others</div>
+          <div style={{fontSize:14,color:C.muted,marginBottom:24}}>Sign in to post listings or contact drivers</div>
           <button onClick={()=>{setLoggedIn(true);setShowLogin(false);}} style={{width:"100%",background:"#1877f2",border:"none",borderRadius:12,padding:"15px 20px",color:C.white,fontSize:15,fontWeight:700,cursor:"pointer",marginBottom:16,display:"flex",alignItems:"center",justifyContent:"center",gap:10}}>
             <span style={{fontSize:20,fontWeight:900}}>f</span> Continue with Facebook
           </button>
           <div style={{fontSize:11,color:C.muted2,textAlign:"center" as const,lineHeight:1.6,marginBottom:20}}>We only use your name and photo. We never post on your behalf.</div>
-          <Divider label="Or verify phone"/>
+          <Divider label="or verify your phone"/>
           <Field label="Phone number" ph="+1 (555) 000-0000" val={loginPhone} onChange={setLoginPhone} type="tel"/>
-          <SubmitBtn label="Send code →" onClick={()=>setLoginStep("code")}/>
+          <SubmitBtn label="Send verification code →" onClick={()=>{if(loginPhone.length>5)setLoginStep("code");else alert("Enter a valid phone number");}}/>
         </>}
         {loginStep==="code"&&<>
-          <div style={{fontWeight:800,fontSize:20,marginBottom:12,color:C.white}}>Enter verification code</div>
+          <div style={{fontWeight:800,fontSize:20,marginBottom:12,color:C.white}}>Enter code</div>
           <div style={{fontSize:13,color:C.green,marginBottom:16,padding:"10px 14px",background:"rgba(63,185,80,.1)",borderRadius:10,border:`1px solid rgba(63,185,80,.3)`}}>✓ Code sent to {loginPhone}</div>
           <Field label="" ph="6-digit code" val={loginCode} onChange={setLoginCode} type="tel"/>
-          <SubmitBtn label="Verify →" onClick={()=>{setLoggedIn(true);setShowLogin(false);setLoginStep("main");}}/>
+          <SubmitBtn label="Verify & continue →" onClick={()=>{setLoggedIn(true);setShowLogin(false);setLoginStep("main");}}/>
           <button onClick={()=>setLoginStep("main")} style={{background:"none",border:"none",color:C.muted,fontSize:13,cursor:"pointer",marginTop:12,width:"100%",textAlign:"center" as const}}>← Back</button>
         </>}
       </div>
@@ -447,7 +456,7 @@ export default function App() {
   );
 
   const ReportModal = () => (
-    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:300,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>{setShowReport(null);setReportDone(false);}}>
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.88)",zIndex:300,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>{setShowReport(null);setReportDone(false);}}>
       <div onClick={e=>e.stopPropagation()} style={{background:C.card2,border:`1px solid ${C.border}`,borderRadius:20,padding:28,width:"100%",maxWidth:360}}>
         {reportDone?<div style={{textAlign:"center" as const,padding:"20px 0"}}>
           <div style={{fontSize:40,marginBottom:12}}>✅</div>
@@ -467,26 +476,24 @@ export default function App() {
     </div>
   );
 
-  const nb = (sp=false) => <NavBar onHome={()=>nav("home")} onPost={()=>nav("owner")} onProfile={()=>nav("profile-me")} loggedIn={loggedIn} showPost={sp}/>;
+  const nb = (sp=false) => <NavBar onHome={()=>nav("home")} onPost={()=>nav("owner")} onProfile={()=>nav("profile-me")} onSignIn={()=>setShowLogin(true)} loggedIn={loggedIn} showPost={sp}/>;
   const ft = () => <Footer onNav={nav}/>;
+  const lc = () => <ListingCard l={profileUser!} onChat={l=>{setChatWith(l);nav("chat");}} onProfile={()=>{}} onReport={l=>{setShowReport(l);setReportReason("");}} loggedIn={loggedIn} showLogin={()=>setShowLogin(true)}/>;
 
-  // ─── VIEWS ──────────────────────────────────────────────────────────────────
+  // ── VIEWS ──────────────────────────────────────────────────────────────────
 
   if(view==="home") return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
       {showLogin&&<LoginModal/>}
-      {showReport&&<ReportModal/>}
-      {nb()}
+      <NavBar onHome={()=>nav("home")} onPost={()=>nav("owner")} onProfile={()=>nav("profile-me")} onSignIn={()=>setShowLogin(true)} loggedIn={loggedIn}/>
       <div style={{minHeight:"90vh",display:"flex",flexDirection:"column" as const,alignItems:"center",justifyContent:"center",padding:"60px 20px 40px",textAlign:"center" as const,position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",width:500,height:500,background:`radial-gradient(circle,rgba(240,160,48,.12) 0%,transparent 70%)`,top:-80,left:-60,pointerEvents:"none"}}/>
         <div style={{position:"absolute",width:350,height:350,background:`radial-gradient(circle,rgba(63,185,80,.07) 0%,transparent 70%)`,bottom:-40,right:-40,pointerEvents:"none"}}/>
         <div style={{fontSize:11,letterSpacing:"3px",textTransform:"uppercase" as const,color:C.green,marginBottom:16,fontWeight:600,background:"rgba(63,185,80,.1)",padding:"6px 16px",borderRadius:100,border:`1px solid rgba(63,185,80,.2)`}}>🐾 Free Community Platform</div>
-        <div style={{fontWeight:900,fontSize:"clamp(40px,10vw,80px)",letterSpacing:-2,lineHeight:1,marginBottom:16}} translate="no">
-          Pet<span style={{color:C.orange}}>Along</span>
-        </div>
+        <div style={{fontWeight:900,fontSize:"clamp(40px,10vw,80px)",letterSpacing:-2,lineHeight:1,marginBottom:16}} translate="no">Pet<span style={{color:C.orange}}>Along</span></div>
         <div style={{fontSize:"clamp(15px,3vw,20px)",color:C.muted,maxWidth:480,lineHeight:1.6,marginBottom:48}}>Pets travel with people already going their way</div>
         <div style={{display:"flex",gap:28,marginBottom:52,flexWrap:"wrap" as const,justifyContent:"center"}}>
-          {[{n:"50+",l:"Countries"},{n:"Free",l:"Forever"},{n:"P2P",l:"Direct connections"},{n:"0%",l:"Commission"}].map((s,i)=>(
+          {[{n:"50+",l:"Countries"},{n:"Free",l:"Forever"},{n:"P2P",l:"Direct"},{n:"0%",l:"Commission"}].map((s,i)=>(
             <div key={i} style={{textAlign:"center" as const}}>
               <div style={{fontWeight:900,fontSize:22,color:C.orange}}>{s.n}</div>
               <div style={{fontSize:11,color:C.muted,letterSpacing:"1px",textTransform:"uppercase" as const}}>{s.l}</div>
@@ -506,7 +513,6 @@ export default function App() {
         </div>
         <button onClick={()=>nav("feed")} style={{background:"transparent",border:`1px solid ${C.border}`,color:C.muted,padding:"11px 24px",borderRadius:100,fontSize:14,cursor:"pointer"}}>Browse all listings →</button>
       </div>
-      {/* HOW IT WORKS */}
       <div style={{borderTop:`1px solid ${C.border2}`,padding:"60px 20px",background:C.card}}>
         <div style={{maxWidth:860,margin:"0 auto"}}>
           <div style={{fontWeight:900,fontSize:"clamp(22px,5vw,32px)",letterSpacing:-1,marginBottom:36,textAlign:"center" as const}}>How PetAlong works</div>
@@ -521,12 +527,11 @@ export default function App() {
           </div>
         </div>
       </div>
-      {/* WHY */}
       <div style={{padding:"60px 20px"}}>
         <div style={{maxWidth:860,margin:"0 auto"}}>
           <div style={{fontWeight:900,fontSize:"clamp(22px,5vw,32px)",letterSpacing:-1,marginBottom:36,textAlign:"center" as const}}>Why PetAlong?</div>
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:14}}>
-            {[{icon:"💰",t:"Save up to 80%",d:"Pro couriers charge $500–2000+. With PetAlong drivers are already going your way."},{icon:"🛡️",t:"Community trust",d:"Facebook profiles, phone verification, ratings and reviews."},{icon:"🌍",t:"Worldwide",d:"USA, Europe, Canada, Australia and 50+ countries."},{icon:"⚡",t:"Fast & simple",d:"Post in 2 minutes. No forms, no quotes, no middlemen."}].map((w,i)=>(
+            {[{icon:"💰",t:"Save up to 80%",d:"Pro couriers charge $500–2000+. Drivers are already going your way."},{icon:"🛡️",t:"Community trust",d:"Facebook profiles, phone verification, ratings and reviews."},{icon:"🌍",t:"Worldwide",d:"USA, Europe, Canada, Australia and 50+ countries."},{icon:"⚡",t:"Fast & simple",d:"Post in 2 minutes. No forms, no quotes, no middlemen."}].map((w,i)=>(
               <div key={i} style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:20}}>
                 <div style={{fontSize:28,marginBottom:10}}>{w.icon}</div>
                 <div style={{fontWeight:700,fontSize:14,marginBottom:6,color:C.white}}>{w.t}</div>
@@ -536,7 +541,6 @@ export default function App() {
           </div>
         </div>
       </div>
-      {/* TESTIMONIALS */}
       <div style={{borderTop:`1px solid ${C.border2}`,padding:"60px 20px",background:C.card}}>
         <div style={{maxWidth:900,margin:"0 auto"}}>
           <div style={{fontWeight:900,fontSize:"clamp(22px,5vw,32px)",letterSpacing:-1,marginBottom:8,textAlign:"center" as const}}>What our community says</div>
@@ -559,7 +563,7 @@ export default function App() {
           </div>
         </div>
       </div>
-      {ft()}
+      <Footer onNav={nav}/>
     </div>
   );
 
@@ -567,7 +571,7 @@ export default function App() {
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
       {showLogin&&<LoginModal/>}
       {showReport&&<ReportModal/>}
-      {nb(true)}
+      <NavBar onHome={()=>nav("home")} onPost={()=>nav("owner")} onProfile={()=>nav("profile-me")} onSignIn={()=>setShowLogin(true)} loggedIn={loggedIn} showPost/>
       <div style={{maxWidth:680,margin:"0 auto",padding:"28px 20px 80px"}}>
         <BackBtn to="home"/>
         <div style={{fontWeight:900,fontSize:28,letterSpacing:-1,marginBottom:4}}>Live listings</div>
@@ -603,12 +607,11 @@ export default function App() {
             onChat={l=>{setChatWith(l);nav("chat");}}
             onProfile={l=>{setProfileUser(l);nav("profile-user");}}
             onReport={l=>{setShowReport(l);setReportReason("");}}
-            loggedIn={loggedIn}
-            showLogin={()=>setShowLogin(true)}
+            loggedIn={loggedIn} showLogin={()=>setShowLogin(true)}
           />
         ))}
       </div>
-      {ft()}
+      <Footer onNav={nav}/>
     </div>
   );
 
@@ -629,8 +632,9 @@ export default function App() {
         </div>
         <CountryPicker selected={country} onSelect={setCountry}/>
         <Field label="Pickup location" ph="City, State or ZIP code" val={oFrom} onChange={setOFrom}/>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"4px 0 8px",color:C.orange,fontSize:22}}>↓</div>
         <Field label="Delivery location" ph="City, State or ZIP code" val={oTo} onChange={setOTo}/>
-        {oFrom&&oTo&&<button onClick={()=>openMaps(oFrom,oTo)} style={{width:"100%",background:"transparent",border:`1px solid #238636`,color:C.green,borderRadius:10,padding:"10px",fontSize:13,cursor:"pointer",fontWeight:600,marginBottom:16}}>🗺 View route on Google Maps</button>}
+        <RouteArrow from={oFrom} to={oTo} onMap={()=>openMaps(oFrom,oTo)}/>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
           <Field label="Pet name" ph="Buddy" val={oName} onChange={setOName}/>
           <Field label="Weight (lbs)" ph="45" type="number" val={oWeight} onChange={setOWeight}/>
@@ -674,15 +678,16 @@ export default function App() {
         <div style={{fontSize:14,color:C.muted,marginBottom:24}}>Post your trip — owners with pets along your route will find you</div>
         <CountryPicker selected={country} onSelect={setCountry}/>
         <Field label="Departing from" ph="City, State or ZIP code" val={dFrom} onChange={setDFrom}/>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"center",margin:"4px 0 8px",color:C.orange,fontSize:22}}>↓</div>
         <Field label="Heading to" ph="City, State or ZIP code" val={dTo} onChange={setDTo}/>
-        {dFrom&&dTo&&<button onClick={()=>openMaps(dFrom,dTo)} style={{width:"100%",background:"transparent",border:`1px solid #238636`,color:C.green,borderRadius:10,padding:"10px",fontSize:13,cursor:"pointer",fontWeight:600,marginBottom:16}}>🗺 View route on Google Maps</button>}
+        <RouteArrow from={dFrom} to={dTo} onMap={()=>openMaps(dFrom,dTo)}/>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
           <Field label="Travel date" ph="" type="date" val={dDate} onChange={setDDate}/>
           <Field label="Max weight (lbs)" ph="80" type="number" val={dCap} onChange={setDCap}/>
         </div>
-        <Divider label="Pickup detour"/>
+        <Divider label="Pickup detour radius"/>
         <Slider label="How far will you detour to pick up?" val={dRA} onChange={setDRA} color="orange"/>
-        <Divider label="Delivery detour"/>
+        <Divider label="Delivery detour radius"/>
         <Slider label="How far will you detour to deliver?" val={dRB} onChange={setDRB} color="green"/>
         {(dRA>0||dRB>0)&&<div style={{fontSize:13,color:"#c9d1d9",padding:"10px 14px",background:C.card2,borderRadius:10,border:`1px solid ${C.border}`,marginBottom:16}}>📍 Pickup ±{dRA} mi · 🏁 Delivery ±{dRB} mi</div>}
         <Field label="Notes (optional)" ph="Vehicle type, pet experience..." val={dNotes} onChange={setDNotes} multiline/>
@@ -757,13 +762,7 @@ export default function App() {
           </div>
           <TrustBadges l={profileUser}/>
         </div>
-        <ListingCard l={profileUser}
-          onChat={l=>{setChatWith(l);nav("chat");}}
-          onProfile={()=>{}}
-          onReport={l=>{setShowReport(l);setReportReason("");}}
-          loggedIn={loggedIn}
-          showLogin={()=>setShowLogin(true)}
-        />
+        {lc()}
       </div>
       {ft()}
     </div>
@@ -840,7 +839,7 @@ export default function App() {
         <BackBtn to="home"/>
         <div style={{fontWeight:900,fontSize:28,letterSpacing:-1,marginBottom:32}}>How PetAlong works</div>
         <div style={{display:"flex",flexDirection:"column" as const,gap:14}}>
-          {[{icon:"📋",t:"Post your listing",d:"Owner posts pet details with photo. Driver posts route and detour radius. Takes 2 minutes."},{icon:"🔍",t:"Get matched",d:"Your listing is shown to drivers or owners going the same way."},{icon:"💬",t:"Connect directly",d:"Chat, call or SMS. Agree on price between yourselves."},{icon:"🐾",t:"Pet travels safely",d:"Driver takes pet along their existing route. Everyone saves money."}].map((h,i)=>(
+          {[{icon:"📋",t:"Post your listing",d:"Owner posts pet details with photo. Driver posts route and detour radius."},{icon:"🔍",t:"Get matched",d:"Your listing is shown to drivers or owners going the same way."},{icon:"💬",t:"Connect directly",d:"Chat, call or SMS. Agree on price between yourselves."},{icon:"🐾",t:"Pet travels safely",d:"Driver takes pet along their existing route. Everyone saves money."}].map((h,i)=>(
             <div key={i} style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:22,display:"flex",gap:16}}>
               <div style={{fontSize:36,flexShrink:0}}>{h.icon}</div>
               <div>
