@@ -497,7 +497,7 @@ export default function App() {
 
   if(view==="home") return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
-      {showLogin{showLogin&&<LoginModal/>}{showLogin&&<LoginModal/>}<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}}/>}
+      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}/>}
       <NavBar onHome={()=>nav("home")} onPost={()=>nav("owner")} onProfile={()=>nav("profile-me")} onSignIn={()=>setShowLogin(true)} loggedIn={loggedIn}/>
       <div style={{minHeight:"90vh",display:"flex",flexDirection:"column" as const,alignItems:"center",justifyContent:"center",padding:"60px 20px 40px",textAlign:"center" as const,position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",width:500,height:500,background:`radial-gradient(circle,rgba(240,160,48,.12) 0%,transparent 70%)`,top:-80,left:-60,pointerEvents:"none"}}/>
@@ -582,7 +582,7 @@ export default function App() {
 
   if(view==="feed") return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
-      {showLogin{showLogin&&<LoginModal/>}{showLogin&&<LoginModal/>}<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}}/>}
+      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}/>}
       {showReport&&<ReportModal/>}
       <NavBar onHome={()=>nav("home")} onPost={()=>nav("owner")} onProfile={()=>nav("profile-me")} onSignIn={()=>setShowLogin(true)} loggedIn={loggedIn} showPost/>
       <div style={{maxWidth:680,margin:"0 auto",padding:"28px 20px 80px"}}>
@@ -630,7 +630,7 @@ export default function App() {
 
   if(view==="owner") return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
-      {showLogin{showLogin&&<LoginModal/>}{showLogin&&<LoginModal/>}<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}}/>}
+      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}/>}
       {nb()}
       <div style={{maxWidth:540,margin:"0 auto",padding:"28px 20px 80px"}}>
         <BackBtn to="home"/>
@@ -683,7 +683,7 @@ export default function App() {
 
   if(view==="driver") return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
-      {showLogin{showLogin&&<LoginModal/>}{showLogin&&<LoginModal/>}<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}}/>}
+      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}/>}
       {nb()}
       <div style={{maxWidth:540,margin:"0 auto",padding:"28px 20px 80px"}}>
         <BackBtn to="home"/>
