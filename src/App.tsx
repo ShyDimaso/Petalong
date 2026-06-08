@@ -283,14 +283,41 @@ interface LoginModalProps {
   loginStep: "main"|"phone"|"code";
   loginPhone: string;
   loginCode: string;
+  loginLoading: boolean;
+  loginError: string;
   setLoginPhone: (v:string)=>void;
   setLoginCode: (v:string)=>void;
   setLoginStep: (v:"main"|"phone"|"code")=>void;
   setLoggedIn: (v:boolean)=>void;
   setShowLogin: (v:boolean)=>void;
+  setLoginLoading: (v:boolean)=>void;
+  setLoginError: (v:string)=>void;
 }
-const LoginModal = ({loginStep,loginPhone,loginCode,setLoginPhone,setLoginCode,setLoginStep,setLoggedIn,setShowLogin}:LoginModalProps) => (
-  <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.88)",zIndex:300,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>{setShowLogin(false);setLoginStep("main");}}>
+const LoginModal = ({loginStep,loginPhone,loginCode,loginLoading,loginError,setLoginPhone,setLoginCode,setLoginStep,setLoggedIn,setShowLogin,setLoginLoading,setLoginError}:LoginModalProps) => {
+  const sendCode = async () => {
+    if(loginPhone.length<5){setLoginError("Enter a valid phone number");return;}
+    setLoginLoading(true);setLoginError("");
+    try {
+      const res = await fetch("/api/send-code",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:loginPhone})});
+      const data = await res.json();
+      if(data.success){setLoginStep("code");}
+      else{setLoginError(data.error||"Failed to send code");}
+    } catch(e){setLoginError("Network error. Try again.");}
+    setLoginLoading(false);
+  };
+  const verifyCode = async () => {
+    if(loginCode.length<4){setLoginError("Enter the code from SMS");return;}
+    setLoginLoading(true);setLoginError("");
+    try {
+      const res = await fetch("/api/verify-code",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:loginPhone,code:loginCode})});
+      const data = await res.json();
+      if(data.success){setLoggedIn(true);setShowLogin(false);setLoginStep("main");}
+      else{setLoginError("Wrong code. Try again.");}
+    } catch(e){setLoginError("Network error. Try again.");}
+    setLoginLoading(false);
+  };
+  return (
+  <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.88)",zIndex:300,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>{setShowLogin(false);setLoginStep("main");setLoginError("");}}>
     <div onClick={e=>e.stopPropagation()} style={{background:C.card2,border:`1px solid ${C.border}`,borderRadius:20,padding:32,width:"100%",maxWidth:380}}>
       {loginStep==="main"&&<>
         <div style={{fontWeight:800,fontSize:22,marginBottom:6,color:C.white}}>Join PetAlong</div>
@@ -300,19 +327,22 @@ const LoginModal = ({loginStep,loginPhone,loginCode,setLoginPhone,setLoginCode,s
         </button>
         <div style={{fontSize:11,color:C.muted2,textAlign:"center" as const,lineHeight:1.6,marginBottom:20}}>We only use your name and photo. We never post on your behalf.</div>
         <Divider label="or verify your phone"/>
-        <Field label="Phone number" ph="+1 (555) 000-0000" val={loginPhone} onChange={setLoginPhone} type="tel"/>
-        <SubmitBtn label="Send verification code →" onClick={()=>{if(loginPhone.length>5)setLoginStep("code");else alert("Enter a valid phone number");}}/>
+        <Field label="Phone number" ph="+1 (555) 000-0000" val={loginPhone} onChange={v=>{setLoginPhone(v);setLoginError("");}} type="tel"/>
+        {loginError&&<div style={{color:C.red,fontSize:13,marginBottom:12}}>{loginError}</div>}
+        <SubmitBtn label={loginLoading?"Sending...":"Send verification code →"} onClick={sendCode} disabled={loginLoading}/>
       </>}
       {loginStep==="code"&&<>
         <div style={{fontWeight:800,fontSize:20,marginBottom:12,color:C.white}}>Enter code</div>
         <div style={{fontSize:13,color:C.green,marginBottom:16,padding:"10px 14px",background:"rgba(63,185,80,.1)",borderRadius:10,border:`1px solid rgba(63,185,80,.3)`}}>✓ Code sent to {loginPhone}</div>
-        <Field label="" ph="6-digit code" val={loginCode} onChange={setLoginCode} type="tel"/>
-        <SubmitBtn label="Verify & continue →" onClick={()=>{setLoggedIn(true);setShowLogin(false);setLoginStep("main");}}/>
-        <button onClick={()=>setLoginStep("main")} style={{background:"none",border:"none",color:C.muted,fontSize:13,cursor:"pointer",marginTop:12,width:"100%",textAlign:"center" as const}}>← Back</button>
+        <Field label="" ph="6-digit code" val={loginCode} onChange={v=>{setLoginCode(v);setLoginError("");}} type="tel"/>
+        {loginError&&<div style={{color:C.red,fontSize:13,marginBottom:12}}>{loginError}</div>}
+        <SubmitBtn label={loginLoading?"Verifying...":"Verify & continue →"} onClick={verifyCode} disabled={loginLoading}/>
+        <button onClick={()=>{setLoginStep("main");setLoginError("");}} style={{background:"none",border:"none",color:C.muted,fontSize:13,cursor:"pointer",marginTop:12,width:"100%",textAlign:"center" as const}}>← Back</button>
       </>}
     </div>
   </div>
-);
+  );
+};
 
 // ── MAIN APP ──────────────────────────────────────────────────────────────────
 export default function App() {
@@ -328,6 +358,8 @@ export default function App() {
   const [loginStep, setLoginStep] = useState<"main"|"phone"|"code">("main");
   const [loginPhone, setLoginPhone] = useState("");
   const [loginCode, setLoginCode] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const [chatWith, setChatWith] = useState<Listing|null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [newMsg, setNewMsg] = useState("");
@@ -497,7 +529,7 @@ export default function App() {
 
   if(view==="home") return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
-      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}/>}
+      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} loginLoading={loginLoading} loginError={loginError} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin} setLoginLoading={setLoginLoading} setLoginError={setLoginError}/>}
       <NavBar onHome={()=>nav("home")} onPost={()=>nav("owner")} onProfile={()=>nav("profile-me")} onSignIn={()=>setShowLogin(true)} loggedIn={loggedIn}/>
       <div style={{minHeight:"90vh",display:"flex",flexDirection:"column" as const,alignItems:"center",justifyContent:"center",padding:"60px 20px 40px",textAlign:"center" as const,position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",width:500,height:500,background:`radial-gradient(circle,rgba(240,160,48,.12) 0%,transparent 70%)`,top:-80,left:-60,pointerEvents:"none"}}/>
@@ -582,7 +614,7 @@ export default function App() {
 
   if(view==="feed") return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
-      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}/>}
+      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} loginLoading={loginLoading} loginError={loginError} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin} setLoginLoading={setLoginLoading} setLoginError={setLoginError}/>}
       {showReport&&<ReportModal/>}
       <NavBar onHome={()=>nav("home")} onPost={()=>nav("owner")} onProfile={()=>nav("profile-me")} onSignIn={()=>setShowLogin(true)} loggedIn={loggedIn} showPost/>
       <div style={{maxWidth:680,margin:"0 auto",padding:"28px 20px 80px"}}>
@@ -630,7 +662,7 @@ export default function App() {
 
   if(view==="owner") return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
-      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}/>}
+      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} loginLoading={loginLoading} loginError={loginError} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin} setLoginLoading={setLoginLoading} setLoginError={setLoginError}/>}
       {nb()}
       <div style={{maxWidth:540,margin:"0 auto",padding:"28px 20px 80px"}}>
         <BackBtn to="home"/>
@@ -683,7 +715,7 @@ export default function App() {
 
   if(view==="driver") return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.white,fontFamily:"system-ui,sans-serif"}}>
-      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin}/>}
+      {showLogin&&<LoginModal loginStep={loginStep} loginPhone={loginPhone} loginCode={loginCode} loginLoading={loginLoading} loginError={loginError} setLoginPhone={setLoginPhone} setLoginCode={setLoginCode} setLoginStep={setLoginStep} setLoggedIn={setLoggedIn} setShowLogin={setShowLogin} setLoginLoading={setLoginLoading} setLoginError={setLoginError}/>}
       {nb()}
       <div style={{maxWidth:540,margin:"0 auto",padding:"28px 20px 80px"}}>
         <BackBtn to="home"/>
