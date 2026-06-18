@@ -16,6 +16,6 @@ module.exports = async (req, res) => {
       .verifications.create({ to: phone, channel: 'sms' });
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message, sidLoaded: !!process.env.TWILIO_VERIFY_SID });
   }
 };
